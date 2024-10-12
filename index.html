@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OwO</title>
+    <link rel="stylesheet" href="index.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <button id="start-button">Start</button> <!-- Start button in the center -->
+    
+    <div class="fallout-console" style="display: none;"> <!-- Initially hidden console -->
+        <div class="header">Silly things about me :></div>
+        <div class="console-content">
+            <span id="caption"></span><span class="cursor">|</span>
+        </div>
+        <button id="skip-button" style="display: none;">Skip Writing</button> <!-- Skip writing button -->
+        <div class="button-container" style="display: none;">
+            <button id="music-button">Music that I like</button>
+            <button id="social-button">Social media</button>
+            <button id="reset-button" style="display: none;">Go Back</button> <!-- New reset button -->
+        </div>
+    </div>
+
+    <audio id="typing-sound" src="teclado.mp3" loop></audio> <!-- Sound for typing effect -->
+    <audio id="start-sound" src="sonido_inicio.mp3"></audio> <!-- Sound for start button -->
+
+    <!-- Reproductor de audio -->
+    <div id="audio-player" style="display: none;"> <!-- Asegúrate de que el reproductor esté visible cuando lo necesites -->
+        <img src="megamango-ezgif.com-webp-to-png-converter.png" alt="Imagen del Álbum" id="album-art"> <!-- Cambia por tu imagen -->
+        <p id="song-info">Song: [Sorry!] <br> Artist: [Mega Mango]</p>
+        
+        <div class="audio-controls">
+            <button class="custom-button" id="volume-up-button">Volume Up</button>
+            <button class="custom-button" id="play-button">▶</button>
+            <button class="custom-button" id="pause-button" style="display: none;">⏸</button>
+            <button class="custom-button" id="volume-down-button">Volume down</button>
+        </div>
+
+        <!-- Barra de progreso de tiempo -->
+        <input type="range" id="progress-bar" value="0" min="0" step="1" style="width: 100%; display: none;">
+        
+        <!-- Minutos y segundos -->
+        <div id="time-display" style="display: none;">
+            <span id="current-time">0:00</span> / <span id="duration">0:00</span>
+        </div>
+
+        <audio id="audio" src="Sorry!.mp3"></audio> <!-- Fuente de la canción -->
+    </div>
+
+    <script>
+        var captionLength = 0;
+        var caption = 
+            "Name: [Elite Soul]<br>" +
+            "Age: [18]<br>" +
+            "Hobbies: [Program Silly Stuff and play videogames]<br>" +
+            "Fun Fact: [I made this in one hour, don't expect too much]<br>" +
+            "Occupation: [¡I'm a Software Engineer Student!]<br>" +
+            "Country: [Mexico]<br>" +
+            "Favorite Food: [My favorite food isn't taco bell, ok?]<br>" +
+            "Favorite Music Genre: [¡Rock and Pop!]<br>" +
+            "Favorite Book: [Oyasumi Punpun]<br>" +
+            "Dream Vacation Destination: [France]<br>" +
+            "______________________________________________________<br><br>" +
+            "Actually, I live in Mexico and I'm studying French and I speak a little bit of Portuguese.<br>" +
+            "To not make this boring, you can click on these buttons of what you want to know about me.<br>" +
+            "(¡Or just ask! it's better).";
+
+        var typingSound = document.getElementById("typing-sound");
+        var startSound = document.getElementById("start-sound");
+        var audio = document.getElementById("audio"); // Reproductor de audio
+        var progressBar = document.getElementById("progress-bar"); // Barra de progreso
+        var currentTimeDisplay = document.getElementById("current-time"); // Display para tiempo actual
+        var durationDisplay = document.getElementById("duration"); // Display para duración total
+        var typing; // Variable para almacenar el intervalo de escritura
+        var currentText = caption; // Texto actual a mostrar
+
+        $(document).ready(function() {
+            setInterval(cursorAnimation, 600);  
+            var captionEl = $('#caption');
+
+            // Event listener for the "Start" button
+            $('#start-button').click(function() {
+                startSound.play();
+                $(this).fadeOut();
+                $('.fallout-console').fadeIn();
+                resetTyping();
+                type();
+                $('#skip-button').show();
+            });
+
+            // Event listener for the "Skip Writing" button
+            $('#skip-button').click(function() {
+                if (typing) {
+                    clearTimeout(typing);
+                }
+                captionEl.html(currentText);
+                typingSound.pause();
+                $(this).hide();
+                $('.button-container').fadeIn();
+            });
+
+            // Event listener for "Music that I like" button
+            $('#music-button').click(function() {
+                currentText =    "Favorite Songs:<br>" +
+                "- Song 1: [Sorry! - Mega Mango]<br>" +
+                "- Song 2: [The Joker - Lady Gaga]<br>" +
+                "- Song 3: [Die for you - Joji]<br>" +
+                "- Song 5: [It's alright - Mother Mother]<br>" +
+                "- Song 6: [Ghosting- Mother Mother]<br>" +
+                "- Song 7: [Risk- Mega Mango]<br>" +
+                "- Song 8: [Hayloft II - Mother Mother]<br>" +
+                "______________________________________________________<br><br>" +
+                "I love discovering new music every day!";
+                resetAndType(currentText);
+                $(this).hide();
+                $('#reset-button').show();
+                $('#audio-player').show(); // Mostrar el reproductor de audio
+                progressBar.style.display = "block"; // Muestra la barra de progreso
+                currentTimeDisplay.style.display = "block"; // Muestra el tiempo actual
+                durationDisplay.style.display = "block"; // Muestra la duración total
+                audio.load(); // Cargar la fuente de audio
+            });
+
+            // Event listener for "Social media" button
+            $('#social-button').click(function() {
+                currentText = 
+                    "You can find me on:<br>" +
+                    "- Instagram: <a href='https://www.instagram.com/saul_ren15' target='_blank'>[@saul_ren15]</a><br>" +
+                    "- Discord: <a href='https://discordapp.com/users/iamelitesoul' target='_blank'>[@iamelitesoul]</a><br>" +
+                    "- GitHub: <a href='https://github.com/EliteSou1' target='_blank'>[EliteSou1]</a><br>" +
+                    "- TikTok: <a href='https://www.tiktok.com/@saul_ren?_t=8qTM8dbayBR&_r=1' target='_blank'>[@saul_ren]</a><br>" +
+                    "- I don't give my phone number unless I trust you.<br>" +
+                    "______________________________________________________<br><br>" +
+                    "Feel free to connect!";
+                resetAndType(currentText);
+                $(this).hide();
+                $('#reset-button').show();
+            });
+
+            // Event listener for "Go Back" button
+            $('#reset-button').click(function() {
+                resetConsole();
+                $('#audio-player').hide(); // Ocultar el reproductor de audio
+            });
+
+            // Event listeners for audio control buttons
+            $('#play-button').click(function() {
+                audio.play();
+                $(this).hide(); // Oculta el botón de reproducir
+                $('#pause-button').show(); // Muestra el botón de pausar
+                updateProgressBar(); // Inicia la actualización de la barra de progreso
+            });
+
+            $('#pause-button').click(function() {
+                audio.pause();
+                $(this).hide(); // Oculta el botón de pausar
+                $('#play-button').show(); // Muestra el botón de reproducir
+            });
+
+            $('#volume-up-button').click(function() {
+                if (audio.volume < 1) {
+                    audio.volume = Math.min(1, audio.volume + 0.1); // Incrementa el volumen
+                }
+            });
+
+            $('#volume-down-button').click(function() {
+                if (audio.volume > 0) {
+                    audio.volume = Math.max(0, audio.volume - 0.1); // Decrementa el volumen
+                }
+            });
+
+            // Actualiza la barra de progreso al cambiar el tiempo de reproducción
+            audio.addEventListener('timeupdate', function() {
+                progressBar.value = audio.currentTime; // Actualiza la barra de progreso
+                progressBar.max = audio.duration; // Establece el valor máximo de la barra de progreso
+                
+                // Actualiza los displays de tiempo
+                currentTimeDisplay.textContent = formatTime(audio.currentTime); // Muestra el tiempo actual
+                durationDisplay.textContent = formatTime(audio.duration); // Muestra la duración total
+            });
+
+            // Permite al usuario cambiar el tiempo de reproducción al mover la barra de progreso
+            progressBar.addEventListener('input', function() {
+                audio.currentTime = this.value; // Cambia el tiempo de reproducción
+            });
+        });
+
+        function resetTyping() {
+            captionLength = 0;
+            $('#caption').html('');
+            typingSound.play();
+        }
+
+        function type() {
+            if (captionLength < currentText.length) {
+                $('#caption').html(currentText.substr(0, captionLength++));
+                typing = setTimeout(type, 50);
+            } else {
+                typingSound.pause();
+                $('#skip-button').hide();
+                $('.button-container').fadeIn();
+            }
+        }
+
+        function resetAndType(text) {
+            resetTyping();
+            captionLength = 0;
+            $('#caption').html('');
+            $('#skip-button').show();
+            $('.button-container').fadeOut();
+            currentText = text;
+            typeText(text);
+        }
+
+        function typeText(text) {
+            if (captionLength < text.length) {
+                $('#caption').html(text.substr(0, captionLength++));
+                typing = setTimeout(function() {
+                    typeText(text);
+                }, 50);
+            } else {
+                typingSound.pause();
+                $('#skip-button').hide();
+                $('.button-container').fadeIn();
+            }
+        }
+
+        function resetConsole() {
+            $('#caption').html('');
+            captionLength = 0;
+            $('#skip-button').show();
+            $('#music-button').show();
+            $('#social-button').show();
+            $('#reset-button').hide();
+            $('.fallout-console').fadeIn();
+            resetTyping();
+            currentText = caption;
+            type();
+        }
+
+        function cursorAnimation() {
+            $('.cursor').fadeOut(200).fadeIn(200);
+        }
+
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${minutes}:${secs < 10 ? '0' : ''}${secs}`; // Formatea el tiempo como "min:seg"
+        }
+
+        function updateProgressBar() {
+            if (!audio.paused) {
+                progressBar.value = audio.currentTime; // Actualiza la barra de progreso
+                requestAnimationFrame(updateProgressBar); // Continúa actualizando la barra de progreso
+            }
+        }
+    </script>
+</body>
+</html>

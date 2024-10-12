@@ -1,0 +1,136 @@
+/* index.css */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #000; /* Fondo negro */
+    color: #0aff00; /* Color verde */
+    font-family: 'Courier New', monospace; /* Fuente de consola */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh; /* Altura completa de la ventana */
+    justify-content: center; /* Centrar verticalmente */
+}
+
+.fallout-console {
+    display: none; /* Ocultar inicialmente la consola */
+    width: 80%;
+    max-width: 600px; /* Ancho máximo de la consola */
+    padding: 20px;
+    border: 5px solid #0aff00; /* Borde verde */
+    background-color: #111; /* Fondo oscuro para la consola */
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0.75); /* Sombra verde */
+    border-radius: 10px; /* Bordes redondeados */
+}
+
+.header {
+    text-align: center; /* Centrar texto */
+    font-size: 1.5em; /* Tamaño de fuente más grande para el encabezado */
+    margin-bottom: 15px; /* Espacio debajo del encabezado */
+    border-bottom: 2px solid #0aff00; /* Borde verde en la parte inferior */
+    padding-bottom: 10px; /* Espacio debajo del texto */
+}
+
+.console-content {
+    font-family: "Lucida Sans Typewriter", "Lucida Console", Monaco, "Bitstream Vera Sans Mono", monospace; /* Fuente de consola */
+    font-size: 1.1em; /* Tamaño de fuente */
+    color: #0aff00; /* Color verde del texto */
+}
+
+.cursor {
+    display: inline-block; /* Mantener en línea */
+    width: 10px; /* Ancho del cursor */
+    height: 20px; /* Alto del cursor */
+    background-color: #0aff00; /* Color del cursor */
+    margin-left: 2px; /* Espacio a la izquierda del cursor */
+    animation: blink 1s steps(2) infinite; /* Efecto de parpadeo */
+}
+
+@keyframes blink {
+    50% {
+        opacity: 0; /* Hacer el cursor invisible en la mitad del ciclo */
+    }
+}
+
+button {
+    cursor: pointer; /* Cambiar el cursor al pasar por encima */
+    padding: 10px 20px; /* Espaciado del botón */
+    background-color: #0aff00; /* Color verde */
+    color: black; /* Color del texto */
+    border: none; /* Sin borde */
+    border-radius: 5px; /* Bordes redondeados */
+    font-size: 1em; /* Tamaño de fuente */
+    transition: background-color 0.3s, box-shadow 0.3s; /* Transición suave para el color y la sombra */
+    animation: glow 1.5s infinite alternate; /* Efecto de brillo */
+    margin: 5px; /* Espacio entre los botones */
+}
+
+button:hover {
+    background-color: #00e600; /* Cambiar el color de fondo al pasar el mouse */
+}
+
+/* Estilo para los nuevos botones */
+#music-button, #social-button, #reset-button {
+    display: inline-block; /* Mantener en línea */
+}
+
+a {
+    color: #0aff00; /* Color verde */
+    text-decoration: none; /* Sin subrayado */
+    font-weight: bold; /* Negrita para destacar */
+    transition: color 0.3s; /* Transición suave para el color */
+}
+
+a:hover {
+    color: #00e600; /* Color más brillante al pasar el mouse */
+    text-decoration: underline; /* Subrayar al pasar el mouse */
+}
+
+#audio-player {
+    display: none; /* Ocultar inicialmente el reproductor */
+    background-color: #1a1a1a; /* Fondo oscuro para el reproductor */
+    border: 3px solid #0aff00; /* Borde verde */
+    padding: 10px; /* Espaciado interno */
+    border-radius: 5px; /* Bordes redondeados */
+    margin-top: 15px; /* Espacio superior */
+    text-align: center; /* Centrar contenido dentro del reproductor */
+}
+
+#audio-player img {
+    width: 100px; /* Ancho de la imagen del álbum */
+    height: auto; /* Mantener la relación de aspecto */
+    margin-bottom: 10px; /* Espacio debajo de la imagen */
+}
+
+#audio-player p {
+    font-size: 1.2em; /* Tamaño de fuente para el texto de la canción */
+    margin-bottom: 10px; /* Espacio debajo del texto */
+}
+
+/* Estilos para los botones personalizados del reproductor */
+.audio-controls {
+    display: flex;
+    align-items: center; /* Centrar verticalmente los controles */
+}
+
+.custom-button {
+    background-color: #0aff00; /* Color verde */
+    border: none; /* Sin borde */
+    border-radius: 5px; /* Bordes redondeados */
+    padding: 10px; /* Espaciado interno */
+    margin: 0 5px; /* Espacio lateral */
+    cursor: pointer; /* Cambiar el cursor al pasar el mouse */
+}
+
+.custom-button:hover {
+    background-color: #00e600; /* Cambiar el color de fondo al pasar el mouse */
+}
+
+audio {
+    display: none; /* Ocultar el reproductor de audio predeterminado */
+}
+
